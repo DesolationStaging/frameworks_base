@@ -44,4 +44,8 @@
   <java-symbol type="string" name="global_action_current_user" />
   <java-symbol type="dimen" name="global_actions_avatar_size" />
 
+  <!-- Reboot menu -->
+  <java-symbol type="array" name="shutdown_reboot_options" />
+  <java-symbol type="array" name="shutdown_reboot_actions" />
+
 </resources>
