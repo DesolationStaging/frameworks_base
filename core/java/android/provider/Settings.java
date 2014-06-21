@@ -3359,6 +3359,12 @@ public final class Settings {
         public static final String SCREENSHOT_DELAY = "screenshot_delay";
 
         /**
+         * Disable Immersive Message
+         * @hide
+         */
+        public static final String DISABLE_IMMERSIVE_MESSAGE = "disable_immersive_message";
+
+        /**
          * Volume rocker wake
          * @hide
          */
