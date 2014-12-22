@@ -1777,9 +1777,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
     private void handleUpdateNotifications() {
-        // TODO: Move this into updateNotificationIcons()?
-        if (mNotificationIcons == null) return;
-
         mNotificationData.filterAndSort();
 
         updateNotificationShade();
@@ -1794,6 +1791,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
     private void updateNotificationIcons() {
+        if (mNotificationIcons == null) return;
+
         final LinearLayout.LayoutParams params
             = new LinearLayout.LayoutParams(mIconSize + 2*mIconHPadding, mNaturalBarHeight);
 
