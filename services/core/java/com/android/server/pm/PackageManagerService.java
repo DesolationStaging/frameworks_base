@@ -182,7 +182,6 @@ import android.view.Display;
 import android.view.WindowManager;
 import android.view.WindowManagerPolicy;
 
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -13040,6 +13039,11 @@ public class PackageManagerService extends IPackageManager.Stub {
                      * external storage.
                      */
                     if (externalStorage && !isMounted && !isExternal(ps)) {
+                        continue;
+                    }
+
+                    // Verifying SdDir before Install to avoid NPE
+                    if (PackageHelper.getSdDir(cid) == null) {
                         continue;
                     }
 
