@@ -68,4 +68,17 @@
   <!-- Doze invert -->
   <java-symbol type="bool" name="config_invert_colors_on_doze" />
 
+  <!-- Ambient display -->
+  <java-symbol type="bool" name="config_dozeUseAccelerometer" />
+
+  <!-- Volume panel expanded -->
+  <java-symbol type="drawable" name="expander_open_mtrl_alpha" />
+
+  <!-- Quick Settings tile defaults -->
+  <java-symbol type="string" name="config_defaultQuickSettingsTiles" />
+
+  <!-- First boot install dialog -->
+  <java-symbol type="string" name="android_installing_apk" />
+  <java-symbol type="string" name="android_installing_title" />
+
 </resources>
