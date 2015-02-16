@@ -30,6 +30,7 @@ import android.content.pm.ServiceInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.database.ContentObserver;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.ColorDrawable;
 import android.media.AudioAttributes;
@@ -105,6 +106,7 @@ public class VolumePanel extends Handler implements DemoMode {
     private static final int TIMEOUT_DELAY_COLLAPSED = 4500;
     private static final int TIMEOUT_DELAY_SAFETY_WARNING = 5000;
     private static final int TIMEOUT_DELAY_EXPANDED = 10000;
+    private static final int TIMEOUT_DELAY_VOL_PANEL = 3000;
 
     private static final int MSG_VOLUME_CHANGED = 0;
     private static final int MSG_FREE_RESOURCES = 1;
@@ -148,6 +150,7 @@ public class VolumePanel extends Handler implements DemoMode {
     private boolean mZenModeAvailable;
     private boolean mZenPanelExpanded;
     private int mTimeoutDelay = TIMEOUT_DELAY;
+    private int mVolPanelTimeoutDelay = TIMEOUT_DELAY_VOL_PANEL;
     private float mDisabledAlpha;
     private int mDemoIcon;
     private boolean mVolumeAdjustSound = true;
@@ -286,6 +289,8 @@ public class VolumePanel extends Handler implements DemoMode {
         public void onChange(boolean selfChange) {
             mLinkNotificationWithVolume = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.VOLUME_LINK_NOTIFICATION, 1) == 1;
+            mVolPanelTimeoutDelay = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.VOLUME_PANEL_TIMEOUT, TIMEOUT_DELAY_VOL_PANEL);
             createSliders();
         }
     };
@@ -445,7 +450,7 @@ public class VolumePanel extends Handler implements DemoMode {
         Interaction.register(mView, new Interaction.Callback() {
             @Override
             public void onInteraction() {
-                resetTimeout();
+                resetVolPanelTimeout();
             }
         });
 
@@ -464,9 +469,14 @@ public class VolumePanel extends Handler implements DemoMode {
                     Settings.System.VOLUME_LINK_NOTIFICATION, 1) == 1;
         mExtendedPanelExpanded = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.VOLUME_PANEL_EXPANDED, 0) == 1;
+        mVolPanelTimeoutDelay = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.VOLUME_PANEL_TIMEOUT, TIMEOUT_DELAY_VOL_PANEL);
 
         context.getContentResolver().registerContentObserver(
                 Settings.System.getUriFor(Settings.System.VOLUME_LINK_NOTIFICATION), false,
+                mSettingsObserver);
+        context.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.VOLUME_PANEL_TIMEOUT), false,
                 mSettingsObserver);
 
         if (mZenController != null && !useMasterVolume) {
@@ -536,6 +546,7 @@ public class VolumePanel extends Handler implements DemoMode {
         pw.print("  mZenPanelExpanded="); pw.println(mZenPanelExpanded);
         pw.print("  mNotificationEffectsSuppressor="); pw.println(mNotificationEffectsSuppressor);
         pw.print("  mTimeoutDelay="); pw.println(mTimeoutDelay);
+        pw.print("  mVolPanelTimeoutDelay="); pw.println(mVolPanelTimeoutDelay);
         pw.print("  mDisabledAlpha="); pw.println(mDisabledAlpha);
         pw.print("  mPlayMasterStreamTones="); pw.println(mPlayMasterStreamTones);
         pw.print("  isShowing()="); pw.println(isShowing());
@@ -960,7 +971,7 @@ public class VolumePanel extends Handler implements DemoMode {
                 final View.OnTouchListener showHintOnTouch = new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
-                        resetTimeout();
+                        resetVolPanelTimeout();
                         showSilentHint();
                         return false;
                     }
@@ -1031,7 +1042,7 @@ public class VolumePanel extends Handler implements DemoMode {
         }
     }
 
-    private void updateStates() {
+    public void updateStates() {
         final int count = mSliderPanel.getChildCount();
         for (int i = 0; i < count; i++) {
             StreamControl sc = (StreamControl) mSliderPanel.getChildAt(i).getTag();
@@ -1047,7 +1058,8 @@ public class VolumePanel extends Handler implements DemoMode {
     }
 
     private void updateZenPanelVisible() {
-        setZenPanelVisible(mZenModeAvailable && (isNotificationOrRing(mActiveStreamType) || mExtendedPanelExpanded));
+        setZenPanelVisible(mZenModeAvailable && 
+            (isNotificationOrRing(mActiveStreamType) || mExtendedPanelExpanded));
     }
 
     public void postVolumeChanged(int streamType, int flags) {
@@ -1170,7 +1182,7 @@ public class VolumePanel extends Handler implements DemoMode {
 
         removeMessages(MSG_FREE_RESOURCES);
         sendMessageDelayed(obtainMessage(MSG_FREE_RESOURCES), FREE_DELAY);
-        resetTimeout();
+        resetVolPanelTimeout();
     }
 
     protected void onMuteChanged(int streamType, int flags) {
@@ -1402,7 +1414,7 @@ public class VolumePanel extends Handler implements DemoMode {
 
         removeMessages(MSG_FREE_RESOURCES);
         sendMessageDelayed(obtainMessage(MSG_FREE_RESOURCES), FREE_DELAY);
-        resetTimeout();
+        resetVolPanelTimeout();
     }
 
     protected void onRemoteVolumeUpdateIfShown() {
@@ -1632,6 +1644,18 @@ public class VolumePanel extends Handler implements DemoMode {
         }
     }
 
+    private void resetVolPanelTimeout() {
+        final boolean touchExploration = mAccessibilityManager.isTouchExplorationEnabled();
+        if (LOGD) Log.d(mTag, "resetVolPanelTimeout at " + System.currentTimeMillis()
+                + " delay=" + mVolPanelTimeoutDelay + " touchExploration=" + touchExploration);
+        if (sSafetyWarning == null || !touchExploration) {
+            removeMessages(MSG_TIMEOUT);
+            sendEmptyMessageDelayed(MSG_TIMEOUT, mVolPanelTimeoutDelay);
+            removeMessages(MSG_USER_ACTIVITY);
+            sendEmptyMessage(MSG_USER_ACTIVITY);
+        }
+    }
+
     private void forceTimeout(long delay) {
         if (LOGD) Log.d(mTag, "forceTimeout delay=" + delay + " callers=" + Debug.getCallers(3));
         removeMessages(MSG_TIMEOUT);
@@ -1667,7 +1691,7 @@ public class VolumePanel extends Handler implements DemoMode {
                 setStreamVolume(sc, progress,
                         AudioManager.FLAG_SHOW_UI | AudioManager.FLAG_VIBRATE);
             }
-            resetTimeout();
+            resetVolPanelTimeout();
         }
 
         @Override
