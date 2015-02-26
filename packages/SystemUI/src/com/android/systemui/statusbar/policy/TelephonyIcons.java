@@ -340,4 +340,3 @@ class TelephonyIcons {
             TelephonyIcons.QS_DATA_R
             );
 }
-
