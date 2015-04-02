@@ -159,6 +159,11 @@ public class Ringtone {
                                 .getString(com.android.internal.R.string.ringtone_default);
                         return title;
                     }
+                    if (actualUri == null) {
+                        title = context
+                                .getString(com.android.internal.R.string.ringtone_default);
+                        return title;
+                    }
                     String actualTitle = getTitle(context, actualUri, false);
                     title = context
                             .getString(com.android.internal.R.string.ringtone_default_with_actual,
