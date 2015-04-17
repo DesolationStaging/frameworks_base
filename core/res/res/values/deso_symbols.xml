@@ -65,4 +65,7 @@
   <java-symbol type="id" name="option4" />
   <java-symbol type="id" name="option5" />
 
+  <!-- Doze invert -->
+  <java-symbol type="bool" name="config_invert_colors_on_doze" />
+
 </resources>
