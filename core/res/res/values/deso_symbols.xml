@@ -80,4 +80,7 @@
   <java-symbol type="integer" name="valueOff" />
   <java-symbol type="integer" name="valueOn" />
 
+  <!-- Hardware keys -->
+  <java-symbol type="integer" name="config_deviceHardwareKeys" />
+
 </resources>
