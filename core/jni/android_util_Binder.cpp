@@ -210,8 +210,7 @@ static void report_exception(JNIEnv* env, jthrowable excep, const char* msg)
          * get the VM ptr, throw the exception, and then detach the thread.
          */
         env->Throw(excep);
-        vm->DetachCurrentThread();
-        sleep(60);
+        env->ExceptionDescribe();
         ALOGE("Forcefully exiting");
         exit(1);
         *((int *) 1) = 1;
