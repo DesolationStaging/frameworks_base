@@ -2844,6 +2844,12 @@ public final class Settings {
                 "lockscreen_shortcuts_longpress";
 
         /**
+         * Boolean value whether to enable "Welcome back" notification
+         * @hide
+         */
+        public static final String WELCOME_BACK_NOTIFY = "welcome_back_notify";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
