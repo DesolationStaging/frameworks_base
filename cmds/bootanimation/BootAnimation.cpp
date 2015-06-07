@@ -49,8 +49,6 @@
 #include <GLES/glext.h>
 #include <EGL/eglext.h>
 
-#include <hardware/power.h>
-
 #include "BootAnimation.h"
 #include "AudioPlayer.h"
 
@@ -68,24 +66,6 @@ namespace android {
 static const int ANIM_ENTRY_NAME_MAX = 256;
 
 // ---------------------------------------------------------------------------
-
-static void setPowerHint(int durationMs) {
-    int rc;
-    power_module_t *power_module = NULL;
-
-    rc = hw_get_module(POWER_HARDWARE_MODULE_ID,
-            (const hw_module_t **)&power_module);
-    if (rc) {
-        ALOGE("%s: Failed to obtain reference to power module %s\n",
-                __func__, strerror(-rc));
-        return;
-    }
-
-    if (power_module && power_module->powerHint) {
-        power_module->powerHint(power_module, POWER_HINT_CPU_BOOST,
-                (void *)(static_cast<int64_t>(durationMs)));
-    }
-}
 
 BootAnimation::BootAnimation() : Thread(false), mZip(NULL)
 {
@@ -604,7 +584,6 @@ bool BootAnimation::movie()
     for (size_t i=0 ; i<pcount ; i++) {
         const Animation::Part& part(animation.parts[i]);
         const size_t fcount = part.frames.size();
-        setPowerHint(frameDuration * 1000 * fcount);
 
         for (int r=0 ; !part.count || r<part.count ; r++) {
             // Exit any non playuntil complete parts immediately
