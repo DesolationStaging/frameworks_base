@@ -19,7 +19,6 @@ package android.widget;
 import android.content.Context;
 import android.hardware.SensorManager;
 import android.os.Build;
-import android.os.PowerManager;
 import android.view.ViewConfiguration;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
