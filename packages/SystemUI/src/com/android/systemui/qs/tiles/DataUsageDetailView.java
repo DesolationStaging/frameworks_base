@@ -112,8 +112,12 @@ public class DataUsageDetailView extends LinearLayout {
         graph.setLevels(info.limitLevel, info.warningLevel, info.usageLevel);
         final TextView carrier = (TextView) findViewById(R.id.usage_carrier_text);
         carrier.setText(info.carrier);
-        final TextView period = (TextView) findViewById(R.id.usage_period_text);
-        period.setText(info.period);
+        if (mQSCSwitch) {
+            carrier.setTextColor(textColor);
+        } else {
+            final TextView period = (TextView) findViewById(R.id.usage_period_text);
+            period.setText(info.period);
+        }
         final TextView infoTop = (TextView) findViewById(R.id.usage_info_top_text);
         infoTop.setVisibility(top != null ? View.VISIBLE : View.GONE);
         infoTop.setText(top);

@@ -767,11 +767,6 @@ public class NotificationStackScrollLayout extends ViewGroup
                 && !mOnlyScrollingInThisMotion) {
             horizontalSwipeWantsIt = mSwipeHelper.onTouchEvent(ev);
         }
-
-        if (expandWantsIt && mIsBeingDragged) {
-            mPm.cpuBoost(200 * 1000);
-        }
-
         return horizontalSwipeWantsIt || scrollerWantsIt || expandWantsIt || super.onTouchEvent(ev);
     }
 
