@@ -282,8 +282,6 @@ public class VolumePanel extends Handler implements DemoMode {
     private static AlertDialog sSafetyWarning;
     private static Object sSafetyWarningLock = new Object();
 
-    private boolean mBlurUiEnabled;
-
     private ContentObserver mSettingsObserver = new ContentObserver(this) {
         @Override
         public void onChange(boolean selfChange) {
