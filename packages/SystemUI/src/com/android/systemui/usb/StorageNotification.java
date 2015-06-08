@@ -237,10 +237,8 @@ public class StorageNotification extends SystemUI {
     }
 
     private void onStorageStateChangedAsync(String path, String oldState, String newState) {
-        boolean isPrimary = mStorageManager.getPrimaryVolume().getPath().equals(path);
         if (DEBUG) Log.i(TAG, String.format(
-                "Media {%s} state changed from {%s} -> {%s} (primary = %b)", path, oldState,
-                newState, isPrimary));
+                "Media {%s} state changed from {%s} -> {%s}", path, oldState, newState));
         StorageEntry entry = findEntry(path);
         if (entry != null) {
             if (DEBUG) Log.i(TAG, "E: removed:" + entry.mRemoved + " mounted:" + entry.mMounted + " plugged:" + entry.mPlugged);
@@ -406,7 +404,7 @@ public class StorageNotification extends SystemUI {
             setMediaStorageMountNotification(false, path, true, 0);
             /*
              * Storage has been removed. Show nomedia media notification,
-             * and disable UMS notification if the removed storage is the primary storage.
+             * and disable UMS notification regardless of connection state.
              */
              if (Settings.System.getIntForUser(mContext.getContentResolver(),
                     Settings.System.STORAGE_MEDIA_REMOVED_NOTIFICTION, 1, UserHandle.USER_CURRENT) == 1) {
@@ -414,9 +412,9 @@ public class StorageNotification extends SystemUI {
                         com.android.internal.R.string.ext_media_nomedia_notification_title,
                         com.android.internal.R.string.ext_media_nomedia_notification_message,
                         com.android.internal.R.drawable.stat_notify_sdcard_usb,
-                        true, !isPrimary, null);
+                        true, true, null);
             }
-            updateUsbMassStorageNotification(isPrimary ? false : mUmsAvailable);
+            updateUsbMassStorageNotification(false);
         } else if (newState.equals(Environment.MEDIA_BAD_REMOVAL)) {
             setMediaStorageNotification(0, 0, 0, false, false, null);
             if (entry != null) {
@@ -428,14 +426,14 @@ public class StorageNotification extends SystemUI {
 
             /*
              * Storage has been removed unsafely. Show bad removal media notification,
-             * and disable UMS notification if the removed storage is the primary storage.
+             * and disable UMS notification regardless of connection state.
              */
             setMediaStorageNotification(
                     com.android.internal.R.string.ext_media_badremoval_notification_title,
                     com.android.internal.R.string.ext_media_badremoval_notification_message,
                     com.android.internal.R.drawable.stat_sys_warning,
                     true, true, null);
-            updateUsbMassStorageNotification(isPrimary ? false : mUmsAvailable);
+            updateUsbMassStorageNotification(false);
         } else {
             Log.w(TAG, String.format("Ignoring unknown state {%s}", newState));
         }
