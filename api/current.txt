@@ -5438,7 +5438,6 @@ package android.app.admin {
     field public static final int PASSWORD_QUALITY_ALPHANUMERIC = 327680; // 0x50000
     field public static final int PASSWORD_QUALITY_BIOMETRIC_WEAK = 32768; // 0x8000
     field public static final int PASSWORD_QUALITY_COMPLEX = 393216; // 0x60000
-    field public static final int PASSWORD_QUALITY_GESTURE_WEAK = 524288; // 0x80000
     field public static final int PASSWORD_QUALITY_NUMERIC = 131072; // 0x20000
     field public static final int PASSWORD_QUALITY_NUMERIC_COMPLEX = 196608; // 0x30000
     field public static final int PASSWORD_QUALITY_SOMETHING = 65536; // 0x10000
@@ -10328,8 +10327,6 @@ package android.gesture {
     field public static final int GESTURE_STROKE_TYPE_SINGLE = 0; // 0x0
     field public static final int ORIENTATION_HORIZONTAL = 0; // 0x0
     field public static final int ORIENTATION_VERTICAL = 1; // 0x1
-    field protected boolean mClearPerformedGesture;
-    field protected boolean mInputEnabled;
   }
 
   public static abstract interface GestureOverlayView.OnGestureListener {
@@ -25447,9 +25444,6 @@ package android.provider {
     field public static final java.lang.String ALARM_ALERT = "alarm_alert";
     field public static final deprecated java.lang.String ALWAYS_FINISH_ACTIVITIES = "always_finish_activities";
     field public static final deprecated java.lang.String ANDROID_ID = "android_id";
-    field public static final java.lang.String ANIMATION_CONTROLS_DURATION = "animation_controls_duration";
-    field public static final java.lang.String ANIMATION_CONTROLS_EXIT_ONLY = "animation_controls_exit_only";
-    field public static final java.lang.String ANIMATION_CONTROLS_REVERSE_EXIT = "animation_controls_reverse_exit";
     field public static final deprecated java.lang.String ANIMATOR_DURATION_SCALE = "animator_duration_scale";
     field public static final java.lang.String APPEND_FOR_LAST_AUDIBLE = "_last_audible";
     field public static final deprecated java.lang.String AUTO_TIME = "auto_time";
