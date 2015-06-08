@@ -737,6 +737,7 @@ public final class BatteryService extends SystemService {
                 Slog.w(TAG, "updateLightsLocked: mBatteryProps is null; skipping");
                 return;
             }
+
             final int level = mBatteryProps.batteryLevel;
             final int status = mBatteryProps.batteryStatus;
             if (!mLightEnabled) {
@@ -756,7 +757,7 @@ public final class BatteryService extends SystemService {
                 }
             } else if (status == BatteryManager.BATTERY_STATUS_CHARGING
                     || status == BatteryManager.BATTERY_STATUS_FULL) {
-                if (status == BatteryManager.BATTERY_STATUS_FULL || level >= 90) {
+                if (status == BatteryManager.BATTERY_STATUS_FULL || level >= 98) {
                     // Battery is full or charging and nearly full
                     mBatteryLight.setColor(mBatteryFullARGB);
                 } else {
