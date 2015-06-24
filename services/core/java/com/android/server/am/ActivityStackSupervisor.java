@@ -298,11 +298,6 @@ public final class ActivityStackSupervisor implements DisplayListener {
         }
     }
 
-    /**
-     * Is the privacy guard currently enabled? Shared between ActivityStacks
-     */
-    String mPrivacyGuardPackageName = null;
-
     public ActivityStackSupervisor(ActivityManagerService service) {
         mService = service;
         mHandler = new ActivityStackSupervisorHandler(mService.mHandler.getLooper());
