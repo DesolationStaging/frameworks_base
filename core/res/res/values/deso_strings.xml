@@ -70,11 +70,6 @@
     <string name="silent_mode_priority">Priority</string>
     <string name="silent_mode_none">None</string>
 
-    <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
-    <string name="permlab_setKeyguardWallpaper">set keyguard wallpaper</string>
-    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_setKeyguardWallpaper">Allows an app to change the lock screen wallpaper.</string>
-
     <!-- [CHAR LIMIT=NONE] Message shown in dialog on first boot after clean install for each .apk that is optimized. -->
     <string name="android_installing_apk">Installing app
         <xliff:g id="number" example="123">%1$d</xliff:g> of
