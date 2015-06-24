@@ -7105,7 +7105,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         return action.equals(ActionConstants.ACTION_BACK)
                 || action.equals(ActionConstants.ACTION_MENU_BIG)
                 || action.equals(ActionConstants.ACTION_HOME)
-                || action.equals(ActionConstants.ACTION_SEARCH);
+                || action.equals(ActionConstants.ACTION_SEARCH)
+                || action.equals(ActionConstants.ACTION_RECENTS);
     }
 
     @Override
