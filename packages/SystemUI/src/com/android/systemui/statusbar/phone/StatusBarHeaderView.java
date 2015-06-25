@@ -63,7 +63,7 @@ import java.text.NumberFormat;
 /**
  * The view to manage the header area in the expanded status bar.
  */
-public class StatusBarHeaderView extends RelativeLayout implements View.OnClickListener,
+public class StatusBarHeaderView extends RelativeLayout implements View.OnClickListener, View.OnLongClickListener,
         BatteryController.BatteryStateChangeCallback, NextAlarmController.NextAlarmChangeCallback {
 
     private boolean mExpanded;
@@ -158,6 +158,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         mDateExpanded = (TextView) findViewById(R.id.date_expanded);
         mSettingsButton = findViewById(R.id.settings_button);
         mSettingsButton.setOnClickListener(this);
+        mSettingsButton.setOnLongClickListener(this);
         mQsDetailHeader = findViewById(R.id.qs_detail_header);
         mQsDetailHeader.setAlpha(0);
         mQsDetailHeaderTitle = (TextView) mQsDetailHeader.findViewById(android.R.id.title);
@@ -531,6 +532,21 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         } else if (v == mDateGroup) {
             startDateActivity();
         }
+    }
+
+	@Override
+    public boolean onLongClick(View v) {
+		if (v == mSettingsButton){
+			startSettingsLongClickActivity();
+		}
+		return false;
+	}
+
+	private void startSettingsLongClickActivity() {
+		Intent intent = new Intent(Intent.ACTION_MAIN);
+		intent.setClassName("com.android.settings",
+            "com.android.settings.Settings$CustomSettingsActivity");
+        mActivityStarter.startActivity(intent, true);
     }
 
     private void startSettingsActivity() {
