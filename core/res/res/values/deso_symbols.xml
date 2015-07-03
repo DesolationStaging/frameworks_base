@@ -136,4 +136,7 @@
   <java-symbol type="anim" name="recent_screen_enter_left" />
   <java-symbol type="anim" name="recent_screen_fade_out" />
 
+  <!-- Long-press back kill application -->
+  <java-symbol type="string" name="app_killed_message" />
+
 </resources>
