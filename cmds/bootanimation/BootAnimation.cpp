@@ -53,8 +53,10 @@
 #include "AudioPlayer.h"
 
 #define OEM_BOOTANIMATION_FILE "/oem/media/bootanimation.zip"
+#define DESO_BOOTANIMATION_FILE  "/system/media/desoboot.zip"
 #define SYSTEM_BOOTANIMATION_FILE "/system/media/bootanimation.zip"
 #define SYSTEM_ENCRYPTED_BOOTANIMATION_FILE "/system/media/bootanimation-encrypted.zip"
+
 #define EXIT_PROP_NAME "service.bootanim.exit"
 
 extern "C" int clock_nanosleep(clockid_t clock_id, int flags,
@@ -295,6 +297,9 @@ status_t BootAnimation::readyToRun() {
 
             ((access(OEM_BOOTANIMATION_FILE, R_OK) == 0) &&
             ((zipFile = ZipFileRO::open(OEM_BOOTANIMATION_FILE)) != NULL)) ||
+            
+            ((access(DESO_BOOTANIMATION_FILE, R_OK) == 0) &&
+            ((zipFile = ZipFileRO::open(DESO_BOOTANIMATION_FILE)) != NULL)) ||
 
             ((access(SYSTEM_BOOTANIMATION_FILE, R_OK) == 0) &&
             ((zipFile = ZipFileRO::open(SYSTEM_BOOTANIMATION_FILE)) != NULL))) {
@@ -669,7 +674,6 @@ bool BootAnimation::movie()
 
     return false;
 }
-
 // ---------------------------------------------------------------------------
 
 }
