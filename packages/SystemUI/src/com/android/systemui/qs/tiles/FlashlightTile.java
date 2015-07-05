@@ -43,8 +43,12 @@ public class FlashlightTile extends QSTile<QSTile.BooleanState> implements
     public FlashlightTile(Host host) {
         super(host);
         mTorchManager = (TorchManager) mContext.getSystemService(Context.TORCH_SERVICE);
-        mTorchManager.addListener(this);
-        mTorchAvailable = mTorchManager.isAvailable();
+        if (mTorchManager.isTorchSupported() == true){
+			mTorchManager.addListener(this);
+			mTorchAvailable = mTorchManager.isAvailable();
+		} else {
+			mTorchAvailable = false;
+		}
     }
 
     @Override
