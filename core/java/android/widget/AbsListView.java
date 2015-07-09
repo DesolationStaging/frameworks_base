@@ -17,6 +17,7 @@
 package android.widget;
 
 import android.content.Context;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -30,6 +31,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.StrictMode;
 import android.os.Trace;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -440,6 +442,12 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
      * bitmap cache after scrolling.
      */
     boolean mScrollingCacheEnabled;
+    
+	/**
+	* Whether to enable or disable scrolling cache
+	* @hide
+	*/
+	public static final String KEY_SCROLLING_CACHE = "use_scrolling_cache";
 
     /**
      * Whether or not to enable the fast scroll feature on this list
@@ -806,7 +814,9 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
     public AbsListView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         initAbsListView();
-
+		
+		ContentResolver res = context.getContentResolver();
+		
         mOwnerThread = Thread.currentThread();
 
         final TypedArray a = context.obtainStyledAttributes(
@@ -823,7 +833,7 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
         boolean stackFromBottom = a.getBoolean(R.styleable.AbsListView_stackFromBottom, false);
         setStackFromBottom(stackFromBottom);
 
-        setScrollingCacheEnabled(false);
+        setScrollingCacheEnabled(Settings.System.getBoolean(res, Settings.System.KEY_SCROLLING_CACHE, false));
 
         boolean useTextFilter = a.getBoolean(R.styleable.AbsListView_textFilterEnabled, false);
         setTextFilterEnabled(useTextFilter);
